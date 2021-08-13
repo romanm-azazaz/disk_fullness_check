@@ -19,24 +19,20 @@ def check_disk():
     data = shutil.disk_usage("/")
     return data
 
-def check_free_space(data):
-    free_space = (data.free / data.total) * 100
-    return free_space
+def check_remaining_free_space(data):
+    remaining_free_space = (data.free / data.total) * 100
+    return remaining_free_space
 
 def call_command(command):
     subprocess.call(f'{command}', shell=True)
 
-def value_compare(free_space):
-    print(f'{yellow}Free space: {free_space}\nThreshold value: {THRSHOLD_VALUE}')
-    if free_space < THRSHOLD_VALUE: return False
-    else: return True
-
 def main():
     while True:
         data = check_disk()
-        free_space = check_free_space(data)
+        remaining_free_space = check_remaining_free_space(data)
+        print(f'{yellow}Free space: {remaining_free_space}\nThreshold value: {THRSHOLD_VALUE}')
 
-        if value_compare(free_space):
+        if remaining_free_space > THRSHOLD_VALUE:
             time.sleep(CHECK_TIME)
         else: 
             call_command(EXEC_COMMAND)
@@ -50,4 +46,3 @@ if __name__ == '__main__':
     CHECK_TIME = int(script_arg.check_time)
 
     main()
-    
