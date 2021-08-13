@@ -26,7 +26,7 @@ def check_free_space(data):
 def call_command(command):
     subprocess.call(f'{command}', shell=True)
 
-def value_compare(free_space, THRSHOLD_VALUE):
+def value_compare(free_space):
     print(f'{yellow}Free space: {free_space}\nThreshold value: {THRSHOLD_VALUE}')
     if free_space < THRSHOLD_VALUE: return False
     else: return True
@@ -36,7 +36,7 @@ def main():
         data = check_disk()
         free_space = check_free_space(data)
 
-        if value_compare(free_space, THRSHOLD_VALUE):
+        if value_compare(free_space):
             time.sleep(CHECK_TIME)
         else: 
             call_command(EXEC_COMMAND)
