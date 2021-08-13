@@ -27,7 +27,7 @@ def call_command(command):
     subprocess.call(f'{command}', shell=True)
 
 def value_compare(free_space, THRSHOLD_VALUE):
-    print(f'{yellow} Free space: {free_space} THRSHOLD VALUE: {THRSHOLD_VALUE}')
+    print(f'{yellow}Free space: {free_space}\nThreshold value: {THRSHOLD_VALUE}')
     if THRSHOLD_VALUE < free_space: return False
     else: return True
 
