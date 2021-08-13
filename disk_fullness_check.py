@@ -5,6 +5,7 @@ import time
 
 red = '\033[31m'
 green = '\033[32m \033[4m'
+yellow = '\033[33m'
 
 def create_parser():
     parser = argparse.ArgumentParser()
@@ -26,16 +27,11 @@ def call_command(command):
     subprocess.call(f'{command}', shell=True)
 
 def value_compare(free_space, THRSHOLD_VALUE):
-    print(f'Free space: {free_space} THRSHOLD VALUE: {THRSHOLD_VALUE}')
+    print(f'{yellow} Free space: {free_space} THRSHOLD VALUE: {THRSHOLD_VALUE}')
     if THRSHOLD_VALUE < free_space: return False
     else: return True
 
-script_arg = create_parser()
-THRSHOLD_VALUE = int(script_arg.threshold_value)
-EXEC_COMMAND = script_arg.exec_command
-CHECK_TIME = int(script_arg.check_time)
-
-if __name__ == '__main__':
+def main():
     while True:
         data = check_disk()
         free_space = check_free_space(data)
@@ -47,3 +43,13 @@ if __name__ == '__main__':
             print(f'{red} Free space {free_space}%')
             call_command(EXEC_COMMAND)
             time.sleep(CHECK_TIME)
+
+if __name__ == '__main__':
+    script_arg = create_parser()
+
+    THRSHOLD_VALUE = int(script_arg.threshold_value)
+    EXEC_COMMAND = script_arg.exec_command
+    CHECK_TIME = int(script_arg.check_time)
+
+    main()
+    
