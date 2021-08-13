@@ -28,7 +28,7 @@ def call_command(command):
 
 def value_compare(free_space, THRSHOLD_VALUE):
     print(f'{yellow}Free space: {free_space}\nThreshold value: {THRSHOLD_VALUE}')
-    if THRSHOLD_VALUE < free_space: return False
+    if free_space < THRSHOLD_VALUE: return False
     else: return True
 
 def main():
@@ -37,10 +37,8 @@ def main():
         free_space = check_free_space(data)
 
         if value_compare(free_space, THRSHOLD_VALUE):
-            print(f'{green} Free space {free_space}%')
             time.sleep(CHECK_TIME)
         else: 
-            print(f'{red} Free space {free_space}%')
             call_command(EXEC_COMMAND)
             time.sleep(CHECK_TIME)
 
