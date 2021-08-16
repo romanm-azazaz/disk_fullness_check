@@ -9,7 +9,7 @@ yellow = '\033[33m'
 
 def create_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-v', '--threshold_value', default=False, help='Threshold value of free on disk in percent')
+    parser.add_argument('-v', '--free_space_threshold', default=False, help='Threshold value of used on disk in percent')
     parser.add_argument('-c', '--exec_command', default=False, help='The command is executed after reaching the threshold')
     parser.add_argument('-t', '--check_time', default=False, help='Check time in seconds')
     script_arg = parser.parse_args()
@@ -19,9 +19,9 @@ def check_disk():
     data = shutil.disk_usage("/")
     return data
 
-def check_remaining_free_space(data):
-    remaining_free_space = (data.free / data.total) * 100
-    return remaining_free_space
+def check_used_space(data):
+    used_space = round(98 - (data.free / data.total) * 100)
+    return used_space
 
 def call_command(command):
     subprocess.call(f'{command}', shell=True)
@@ -29,10 +29,10 @@ def call_command(command):
 def main():
     while True:
         data = check_disk()
-        remaining_free_space = check_remaining_free_space(data)
-        print(f'{yellow}Free space: {remaining_free_space}\nThreshold value: {THRSHOLD_VALUE}')
+        used_space = check_used_space(data)
+        print(f'{yellow}Free space: {used_space}%\nThreshold value: {FREE_SPACE_THRSHOLD}%')
 
-        if remaining_free_space > THRSHOLD_VALUE:
+        if used_space < FREE_SPACE_THRSHOLD:
             time.sleep(CHECK_TIME)
         else: 
             call_command(EXEC_COMMAND)
@@ -41,7 +41,7 @@ def main():
 if __name__ == '__main__':
     script_arg = create_parser()
 
-    THRSHOLD_VALUE = int(script_arg.threshold_value)
+    FREE_SPACE_THRSHOLD = int(script_arg.free_space_threshold)
     EXEC_COMMAND = script_arg.exec_command
     CHECK_TIME = int(script_arg.check_time)
 
